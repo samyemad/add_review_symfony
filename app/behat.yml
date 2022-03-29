@@ -1,0 +1,10 @@
+default:
+  suites:
+    default:
+      contexts:
+        - App\Tests\Behat\ReviewConstructionContext
+
+  extensions:
+    FriendsOfBehat\SymfonyExtension:
+      kernel:
+        environment: test
