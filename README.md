@@ -45,3 +45,4 @@ From the base directory run these steps:
 ## Other Notes
 1. I want to make swagger but i don't have time to make it  if you want from me to add swagger  
 2. I pushed .env and .env.test to see you what i did it in these files 
+3. I make many components to show my experience in symfony not think little about over engineering 
