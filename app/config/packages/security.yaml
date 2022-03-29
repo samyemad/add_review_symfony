@@ -1,0 +1,54 @@
+parameters:
+    app.security.api_regex: "^/api"
+    app.security.user_regex: "^/user"
+security:
+    encoders:
+        App\Entity\Client\Client:
+            algorithm: bcrypt
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\Client\Client
+                property: username
+        app_user_provider_token:
+            entity:
+                class: App\Entity\Client\Client
+                property: apiToken
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        api:
+            pattern: "%app.security.api_regex%/shop"
+            anonymous:
+            provider: app_user_provider
+            json_login:
+                check_path: login
+                username_path: credentials.login
+                password_path: credentials.password
+            access_denied_handler: App\Security\AccessDeniedHandler
+        new_api:
+            pattern: "%app.security.api_regex%/account"
+            provider: app_user_provider_token
+            stateless: true
+            anonymous: lazy
+            access_denied_handler: App\Security\AccessDeniedHandler
+            guard:
+                authenticators:
+                    - App\Security\TokenAuthenticator
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: "%app.security.api_regex%/shop/*", role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: "%app.security.api_regex%/account/*", role: ROLE_USER }
+        - { path: "%app.security.user_regex%/article/*", role: ROLE_USER }
+        - { path: "%app.security.user_regex%/details/*", role: IS_AUTHENTICATED_ANONYMOUSLY }

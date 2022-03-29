@@ -1,0 +1,27 @@
+App\Entity\ReviewConstruction\ReviewConstructionItemType:
+    type: entity
+    table: review_construction_item_type
+    indexes:
+        review_item_type_idx:
+            columns: [ name ]
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+            nullable: false
+        created:
+            column: created
+            type: datetime
+            nullable: false
+    oneToMany:
+        reviewConstructionItems:
+            targetEntity: App\Entity\ReviewConstruction\ReviewConstructionItem
+            mappedBy: reviewConstructionItemType
+            cascade: [ "persist" ]
+    lifecycleCallbacks: {  }

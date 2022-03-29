@@ -1,0 +1,66 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+imports:
+    - { resource: packages/listeners/review.yaml }
+parameters:
+    processor_action_namespace: App\ProcessorActions
+    processor_action_directory: ProcessorActions
+    processor_action_annontation_class: ProcessorActio
+
+services:
+
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $test: 'test@test.com'
+            $handlerCollection: '@App\Service\Serializer\HandlerCollection'
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+    App\Service\GenerateEvent: ~
+
+    App\Service\Interfaces\GenerateEventInterface: '@App\Service\GenerateEvent'
+
+    App\ProcessorActions\Discovery\ProcessorActionDiscovery:
+        arguments: [ "%processor_action_namespace%", "%processor_action_directory%", "%processor_action_annontation_class%" , "%kernel.project_dir%", "@annotation_reader" ]
+        public: true
+
+    App\ProcessorActions\Manager\ProcessorActionDiscoveryInterface $processorActionDiscovery: '@App\ProcessorActions\Discovery\ProcessorActionDiscovery'
+
+    processor_action_manager:
+        class: App\ProcessorActions\Manager\ProcessorActionManager
+        arguments: ['@App\ProcessorActions\Discovery\ProcessorActionDiscoveryInterface']
+        public: true
+
+    App\ProcessorActions\Manager\ProcessorActionManagerInterface: '@processor_action_manager'
+
+    App\Service\Serializer\SerializerManager:
+        tags:
+            - { name: 'app.handler.serializer', key: 'handler_serializer' }
+
+    App\Service\Serializer\SerializerNormalizeManager:
+        tags:
+            - { name: 'app.handler.serializer', key: 'handler_serializer_normalizer' }
+
+    App\Service\Serializer\HandlerCollection:
+        # inject all services tagged with app.handler as first argument
+        arguments: [ !tagged_locator { tag: 'app.handler.serializer', index_by: 'key' } ]
+
+    App\Service\Serializer\HandlerCollectionInterface: '@App\Service\Serializer\HandlerCollection'

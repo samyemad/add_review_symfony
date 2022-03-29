@@ -1,0 +1,17 @@
+services:
+    app.listener.review.inserted:
+        class: App\EventListener\ReviewInsertedNotifier
+        tags:
+            - { name: kernel.event_listener, event: app.review.inserted, method: notify }
+        autowire: true
+        public: true
+    app.exception.listener:
+        class: App\EventListener\ExceptionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+#    App\Service\SiteUpdateManager:
+#        arguments:
+##            $test: 'test@test.com'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones

@@ -1,0 +1,50 @@
+App\Entity\Client\Client:
+    type: entity
+    table: client
+    repository: App\Repository\ClientRepository
+    indexes:
+        username_idx:
+            columns: [ username ]
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        username:
+            type: string
+            length: 255
+            unique: true
+            options:
+                comment: 'Email as the username'
+        password:
+            type: string
+            length: 255
+            nullable: false
+            options:
+                comment: 'Use password hash with BCRYPT'
+        firstName:
+            type: string
+            length: 255
+            nullable: false
+            column: first_name
+        lastName:
+            type: string
+            length: 255
+            nullable: false
+            column: last_name
+        apiToken:
+            type: string
+            unique: true
+            nullable: true
+        roles:
+            type: string
+            length: 255
+            nullable: true
+    oneToMany:
+        reviews:
+            targetEntity: App\Entity\Review\Review
+            mappedBy: client
+            cascade: [ "persist" ]
+    lifecycleCallbacks: {  }

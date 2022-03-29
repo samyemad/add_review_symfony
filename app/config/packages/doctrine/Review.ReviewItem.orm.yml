@@ -1,0 +1,35 @@
+App\Entity\Review\ReviewItem:
+    type: entity
+    table: review_item
+    indexes:
+        created_idx:
+            columns: [ created ]
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        result:
+            type: string
+            length: 255
+            nullable: false
+        created:
+            column: created
+            type: datetime
+            nullable: false
+    manyToOne:
+        reviewConstruction:
+            targetEntity: App\Entity\ReviewConstruction\ReviewConstructionItem
+            inversedBy: reviewItems
+            joinColumn:
+                name: construction_item_id
+                referencedColumnName: id
+        review:
+            targetEntity: App\Entity\Review\Review
+            inversedBy: reviewItems
+            joinColumn:
+                name: review_id
+                referencedColumnName: id
+    lifecycleCallbacks: {  }

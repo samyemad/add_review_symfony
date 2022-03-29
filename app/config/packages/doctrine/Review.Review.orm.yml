@@ -1,0 +1,36 @@
+App\Entity\Review\Review:
+    type: entity
+    table: review
+    indexes:
+        created_idx:
+            columns: [ created ]
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        created:
+            column: created
+            type: datetime
+            nullable: false
+    manyToOne:
+        client:
+            targetEntity: App\Entity\Client\Client
+            inversedBy: reviews
+            joinColumn:
+                name: client_id
+                referencedColumnName: id
+        project:
+            targetEntity: App\Entity\Construction\Project
+            inversedBy: reviews
+            joinColumn:
+                name: project_id
+                referencedColumnName: id
+    oneToMany:
+        reviewItems:
+            targetEntity: App\Entity\Review\ReviewItem
+            mappedBy: review
+            cascade: [ "persist" ]
+    lifecycleCallbacks: {  }

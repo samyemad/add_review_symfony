@@ -1,0 +1,27 @@
+App\Entity\Construction\Vico:
+    type: entity
+    table: vico
+    indexes:
+        name_idx:
+            columns: [ name ]
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+            nullable: false
+        created:
+            column: created
+            type: datetime
+            nullable: false
+    oneToMany:
+        projects:
+            targetEntity: App\Entity\Construction\Project
+            mappedBy: vico
+            cascade: [ "persist" ]
+    lifecycleCallbacks: {  }
