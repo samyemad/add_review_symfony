@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Show Article !{% endblock %}
+
+{% block body %}
+
+    <div class="form-control">
+        <h5>Title: {{  article.title }}</h5>
+
+<br/>
+    <div class="form-control">
+        <h5>Description: {{ article.description|length > 1000 ? article.description|slice(0, 1000) ~ '...' : article.description  }}</h5>
+<br/>
+    <div class="form-control">
+        <h5>Image: <img src="{{  article.linkImage }}"/></h5>
+    </div>
+
+        <br/>
+        <h1>comments</h1>
+        {%  for comment in article.comments %}
+            <div class="form-control">
+                <h5>Title: {{  comment.name }}</h5>
+                <h5>Description: {{  comment.description }}</h5>
+            </div>
+            <hr/>
+        {% endfor  %}
+        {% if article.client is not null %}
+    <div class="form-control" >
+        <h5>Author Name: <a href="">{{  article.client.email }}</a></h5>
+    </div>
+        {%  endif %}
+
+        <hr/>
+        <hr/>
+        {% if app.user %}
+        <div>
+        <h5>comment form </h5>
+
+        {{ form_start(form) }}
+        <div class="form-control">
+            <i class="fa fa-calendar"></i> {{ form_label(form.name) }}
+            {{ form_widget(form.name) }}
+
+            <small>{{ form_help(form.name) }}</small>
+
+            <div class="form-error">
+                {{ form_errors(form.name) }}
+            </div>
+        </div>
+        <br/>
+        <div class="form-control">
+            <i class="fa fa-calendar"></i> {{ form_label(form.description) }}
+            {{ form_widget(form.description) }}
+
+            <small>{{ form_help(form.description) }}</small>
+
+            <div class="form-error">
+                {{ form_errors(form.description) }}
+            </div>
+        </div>
+        <br/>
+        <div class="form-control">
+            <i class="fa fa-calendar"></i> {{ form_label(form.urlLink) }}
+            {{ form_widget(form.urlLink) }}
+
+            <small>{{ form_help(form.urlLink) }}</small>
+
+            <div class="form-error">
+                {{ form_errors(form.urlLink) }}
+            </div>
+        </div>
+
+        <br/>
+        <div class="form-control">
+            <i class="fa fa-calendar"></i> {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+
+            <small>{{ form_help(form.email) }}</small>
+
+            <div class="form-error">
+                {{ form_errors(form.email) }}
+            </div>
+        </div>
+
+
+        {{ form_end(form) }}
+        </div>
+        {% endif %}
+
+{% endblock %}
