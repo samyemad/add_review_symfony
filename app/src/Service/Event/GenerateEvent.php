@@ -1,5 +1,5 @@
 <?php
-namespace App\Service;
+namespace App\Service\Event;
 use App\Event\MoviePlacedEvent;
 use App\Service\Interfaces\GenerateEventInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

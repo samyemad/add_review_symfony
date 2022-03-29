@@ -34,9 +34,9 @@ services:
     App\Controller\:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
-    App\Service\GenerateEvent: ~
+    App\Service\Event\GenerateEvent: ~
 
-    App\Service\Interfaces\GenerateEventInterface: '@App\Service\GenerateEvent'
+    App\Service\Interfaces\GenerateEventInterface: '@App\Service\Event\GenerateEvent'
 
     App\ProcessorActions\Discovery\ProcessorActionDiscovery:
         arguments: [ "%processor_action_namespace%", "%processor_action_directory%", "%processor_action_annontation_class%" , "%kernel.project_dir%", "@annotation_reader" ]
